@@ -3,7 +3,7 @@ name: First Workflow
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
   validate-ami-template:
