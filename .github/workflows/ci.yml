@@ -33,5 +33,7 @@ jobs:
       - name: Build and Test
         run: |
           pwd
+          ls -al
+          chmod +x ./mvnw
           ./mvnw clean install
           ./mvnw test
