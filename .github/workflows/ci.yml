@@ -8,13 +8,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      mariadb:
-        image: mariadb:latest
-        env:
-          MYSQL_ROOT_PASSWORD: Charan@98
-          MYSQL_DATABASE: webdb
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -25,6 +18,15 @@ jobs:
           java-version: 17
           distribution: 'temurin'
           cache: maven
+      - name: Set up MariaDB
+        uses: getong/mariadb-action@v1.1
+        with:
+          mysql-database: webdb
+          mysql root password: Charan@98
+          mysql-character-set-server: 'utf8'
+          mysql-collation-server: 'utf8_general_ci'
+          mysql-port: 3306
+
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
