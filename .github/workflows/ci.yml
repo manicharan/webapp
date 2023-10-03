@@ -32,5 +32,6 @@ jobs:
 
       - name: Build and Test
         run: |
+          pwd
           ./mvnw clean install
           ./mvnw test
