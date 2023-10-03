@@ -15,8 +15,7 @@ public class DatabaseService {
         this.dataSource = dataSource;
     }
     public boolean isServerRunning() {
-        try{
-            Connection connection = dataSource.getConnection();
+        try(Connection connection = dataSource.getConnection()){
             return true;
         }
         catch (SQLException e){
