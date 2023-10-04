@@ -1,7 +1,11 @@
 package com.project.webapp.service;
 
+import com.project.webapp.entity.Assignment;
+import com.project.webapp.entity.AssignmentDTO;
 import com.project.webapp.entity.User;
+import com.project.webapp.repository.AssignmentRepository;
 import com.project.webapp.repository.UserRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,6 +20,19 @@ public class UserLoadService {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private AssignmentRepository assignmentRepository;
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+//    public void addAssignmentForUser(User user, AssignmentDTO assignmentDTO) {
+//        Assignment assignment = new Assignment();
+//        BeanUtils.copyProperties(assignmentDTO,assignment);
+//        assignment.setUser(user);
+//        user.getAssignmentList().add(assignment);
+//        assignmentRepository.save(assignment);
+//
+//    }
     public void InitializeUsersFromCSV(){
         try (BufferedReader reader = new BufferedReader(new FileReader("C:/opt/users.csv"))) {
             String line;
@@ -43,4 +60,7 @@ public class UserLoadService {
             System.out.println("Exception: "+e.getMessage());
         }
     }
+
+
+
 }

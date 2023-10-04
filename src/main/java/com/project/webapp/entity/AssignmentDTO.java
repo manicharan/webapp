@@ -1,0 +1,83 @@
+package com.project.webapp.entity;
+
+import java.time.LocalDateTime;
+
+public class AssignmentDTO {
+    private long id;
+    private String name;
+    private int points;
+    private int num_of_attempts;
+    private LocalDateTime deadline;
+    private LocalDateTime assignment_created;
+    private LocalDateTime assignment_updated;
+
+    public AssignmentDTO(long id, String name, int points, int num_of_attempts, LocalDateTime deadline, LocalDateTime assignment_created, LocalDateTime assignment_updated) {
+        this.id = id;
+        this.name = name;
+        this.points = points;
+        this.num_of_attempts = num_of_attempts;
+        this.deadline = deadline;
+        this.assignment_created = assignment_created;
+        this.assignment_updated = assignment_updated;
+    }
+
+    public AssignmentDTO() {
+
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    public int getNum_of_attempts() {
+        return num_of_attempts;
+    }
+
+    public void setNum_of_attempts(int num_of_attempts) {
+        this.num_of_attempts = num_of_attempts;
+    }
+
+    public LocalDateTime getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(LocalDateTime deadline) {
+        this.deadline = deadline;
+    }
+
+    public LocalDateTime getAssignment_created() {
+        return assignment_created;
+    }
+
+    public void setAssignment_created(LocalDateTime assignment_created) {
+        this.assignment_created = assignment_created;
+    }
+
+    public LocalDateTime getAssignment_updated() {
+        return assignment_updated;
+    }
+
+    public void setAssignment_updated(LocalDateTime assignment_updated) {
+        this.assignment_updated = assignment_updated;
+    }
+}

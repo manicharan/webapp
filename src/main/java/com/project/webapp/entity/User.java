@@ -3,6 +3,7 @@ package com.project.webapp.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class User {
@@ -15,6 +16,16 @@ public class User {
     private String email;
     private LocalDateTime account_created;
     private LocalDateTime account_updated;
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Assignment> assignmentList;
+
+    public List<Assignment> getAssignmentList() {
+        return assignmentList;
+    }
+
+    public void setAssignmentList(List<Assignment> assignmentList) {
+        this.assignmentList = assignmentList;
+    }
 
     public long getId() {
         return id;
