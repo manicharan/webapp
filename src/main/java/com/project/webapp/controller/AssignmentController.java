@@ -11,6 +11,7 @@ import com.project.webapp.utility.Validation;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,10 @@ public class AssignmentController {
         List<Assignment> assignmentList = assignmentService.findAll();
         return new ResponseEntity<>(getAssignmentDTOsFromAssignments(assignmentList),HttpStatus.OK);
     }
+    @RequestMapping(method = {RequestMethod.DELETE,RequestMethod.PUT,RequestMethod.PATCH,RequestMethod.HEAD,RequestMethod.OPTIONS})
+    public ResponseEntity<String> anyOtherMethod(){
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).header("NotAllowed","The Requested Method Is Not Allowed").cacheControl(CacheControl.noCache()).build();
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<AssignmentDTO> getAssignmentById(@PathVariable long id) {
@@ -43,6 +48,39 @@ public class AssignmentController {
             return new ResponseEntity<>(getAssignmentDTOFromAssignment(assignment), HttpStatus.OK);
         else
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteAssignmentById(@PathVariable long id,HttpServletRequest request){
+        Assignment assignment=assignmentService.findById(id);
+        if(assignment!=null){
+            String[] credentials = authenticationService.getCredentialsFromRequest(request);
+            if(assignmentService.deleteAssignment(credentials[0],id)){
+                return new ResponseEntity<>(null,HttpStatus.NO_CONTENT);
+            }else
+                return new ResponseEntity<>(null,HttpStatus.FORBIDDEN);
+
+        }
+        else
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateAssignment(@PathVariable long id,@RequestBody(required = false) AssignmentDTO assignmentDTO, HttpServletRequest request){
+        Assignment assignment=assignmentService.findById(id);
+        if(assignment==null){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
+        if(assignmentDTO==null || !(Validation.IsValidAssignment(assignmentDTO)))
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        String[] credentials = authenticationService.getCredentialsFromRequest(request);
+        if(assignmentService.updateAssignment(credentials[0],id,assignmentDTO)){
+            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        }else
+            return new ResponseEntity<>(null,HttpStatus.FORBIDDEN);
+
+    }
+    @PatchMapping("/{id}")
+    public ResponseEntity<String> patchMethod(){
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).header("NotAllowed","The Requested Method Is Not Allowed").cacheControl(CacheControl.noCache()).build();
     }
 
     @PostMapping

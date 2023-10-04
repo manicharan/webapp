@@ -25,6 +25,7 @@ public class SecurityConfig{
         http.authorizeHttpRequests((requests) -> requests
                         .requestMatchers(new AntPathRequestMatcher("/healthz","GET")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/v1/assignments","GET")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/v1/assignments/*","GET")).permitAll()
                         .anyRequest()
                         .authenticated());
         http.httpBasic(withDefaults())

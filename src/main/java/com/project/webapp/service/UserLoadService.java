@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-
 @Service
 public class UserLoadService {
     @Autowired
@@ -25,14 +24,7 @@ public class UserLoadService {
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-//    public void addAssignmentForUser(User user, AssignmentDTO assignmentDTO) {
-//        Assignment assignment = new Assignment();
-//        BeanUtils.copyProperties(assignmentDTO,assignment);
-//        assignment.setUser(user);
-//        user.getAssignmentList().add(assignment);
-//        assignmentRepository.save(assignment);
-//
-//    }
+
     public void InitializeUsersFromCSV(){
         try (BufferedReader reader = new BufferedReader(new FileReader("C:/opt/users.csv"))) {
             String line;
@@ -60,7 +52,4 @@ public class UserLoadService {
             System.out.println("Exception: "+e.getMessage());
         }
     }
-
-
-
 }
