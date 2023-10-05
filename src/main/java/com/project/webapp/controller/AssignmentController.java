@@ -84,15 +84,13 @@ public class AssignmentController {
     }
 
     @PostMapping
-    public ResponseEntity<AssignmentDTO> createAssignment(@RequestBody AssignmentDTO assignmentDTO, HttpServletRequest request) {
-        if (Validation.IsValidAssignment(assignmentDTO)) {
-            String[] credentials = authenticationService.getCredentialsFromRequest(request);
-            User user = userLoadService.findByEmail(credentials[0]);
-            Assignment assignment = assignmentService.saveAssignment(user, assignmentDTO);
-            return new ResponseEntity<>(getAssignmentDTOFromAssignment(assignment), HttpStatus.CREATED);
-        } else {
+    public ResponseEntity<AssignmentDTO> createAssignment(@RequestBody(required = false) AssignmentDTO assignmentDTO, HttpServletRequest request) {
+        if(assignmentDTO==null || !(Validation.IsValidAssignment(assignmentDTO)))
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
+        String[] credentials = authenticationService.getCredentialsFromRequest(request);
+        User user = userLoadService.findByEmail(credentials[0]);
+        Assignment assignment = assignmentService.saveAssignment(user, assignmentDTO);
+        return new ResponseEntity<>(getAssignmentDTOFromAssignment(assignment), HttpStatus.CREATED);
     }
 
     private List<AssignmentDTO> getAssignmentDTOsFromAssignments(List<Assignment> assignmentList) {

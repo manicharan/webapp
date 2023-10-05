@@ -25,7 +25,10 @@ public class AssignmentService {
 
     public Assignment saveAssignment(User user, AssignmentDTO assignmentDTO) {
         Assignment assignment = new Assignment();
-        BeanUtils.copyProperties(assignmentDTO,assignment);
+        assignment.setName(assignmentDTO.getName());
+        assignment.setPoints(assignmentDTO.getPoints());
+        assignment.setNum_of_attempts(assignmentDTO.getNum_of_attempts());
+        assignment.setDeadline(assignmentDTO.getDeadline());
         assignment.setUser(user);
         return assignmentRepository.save(assignment);
     }
