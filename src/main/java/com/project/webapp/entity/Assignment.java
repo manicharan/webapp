@@ -3,12 +3,13 @@ package com.project.webapp.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 public class Assignment {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     private String name;
     private int points;
     private int num_of_attempts;
@@ -20,7 +21,7 @@ public class Assignment {
     private User user;
     public Assignment(){}
 
-    public Assignment(long id, String name, int points, int num_of_attempts, LocalDateTime deadline, LocalDateTime assignment_created, LocalDateTime assignment_updated) {
+    public Assignment(UUID id, String name, int points, int num_of_attempts, LocalDateTime deadline, LocalDateTime assignment_created, LocalDateTime assignment_updated) {
         this.id = id;
         this.name = name;
         this.points = points;
@@ -48,11 +49,11 @@ public class Assignment {
         assignment_updated=LocalDateTime.now();
     }
 
-    public long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

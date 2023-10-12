@@ -1,9 +1,10 @@
 package com.project.webapp.entity;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class AssignmentDTO {
-    private long id;
+    private UUID id;
     private String name;
     private int points;
     private int num_of_attempts;
@@ -11,7 +12,7 @@ public class AssignmentDTO {
     private LocalDateTime assignment_created;
     private LocalDateTime assignment_updated;
 
-    public AssignmentDTO(long id, String name, int points, int num_of_attempts, LocalDateTime deadline, LocalDateTime assignment_created, LocalDateTime assignment_updated) {
+    public AssignmentDTO(UUID id, String name, int points, int num_of_attempts, LocalDateTime deadline, LocalDateTime assignment_created, LocalDateTime assignment_updated) {
         this.id = id;
         this.name = name;
         this.points = points;
@@ -25,11 +26,11 @@ public class AssignmentDTO {
 
     }
 
-    public long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

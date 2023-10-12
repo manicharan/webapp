@@ -4,12 +4,13 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     private String first_name;
     private String last_name;
     private String password;
@@ -27,11 +28,11 @@ public class User {
         this.assignmentList = assignmentList;
     }
 
-    public long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -83,7 +84,7 @@ public class User {
         this.account_updated = account_updated;
     }
 
-    public User(long id, String first_name, String password, String email, LocalDateTime account_created, LocalDateTime account_updated) {
+    public User(UUID id, String first_name, String password, String email, LocalDateTime account_created, LocalDateTime account_updated) {
         this.id = id;
         this.first_name = first_name;
         this.password = password;

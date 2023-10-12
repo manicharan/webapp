@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/assignments")
@@ -42,7 +43,7 @@ public class AssignmentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AssignmentDTO> getAssignmentById(@PathVariable long id) {
+    public ResponseEntity<AssignmentDTO> getAssignmentById(@PathVariable UUID id) {
         Assignment assignment = assignmentService.findById(id);
         if (assignment != null)
             return new ResponseEntity<>(getAssignmentDTOFromAssignment(assignment), HttpStatus.OK);
@@ -50,7 +51,7 @@ public class AssignmentController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteAssignmentById(@PathVariable long id,HttpServletRequest request){
+    public ResponseEntity<String> deleteAssignmentById(@PathVariable UUID id,HttpServletRequest request){
         Assignment assignment=assignmentService.findById(id);
         if(assignment!=null){
             String[] credentials = authenticationService.getCredentialsFromRequest(request);
@@ -64,7 +65,7 @@ public class AssignmentController {
             return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateAssignment(@PathVariable long id,@RequestBody(required = false) AssignmentDTO assignmentDTO, HttpServletRequest request){
+    public ResponseEntity<String> updateAssignment(@PathVariable UUID id,@RequestBody(required = false) AssignmentDTO assignmentDTO, HttpServletRequest request){
         Assignment assignment=assignmentService.findById(id);
         if(assignment==null){
             return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);

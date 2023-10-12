@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AssignmentService {
@@ -33,17 +34,17 @@ public class AssignmentService {
         return assignmentRepository.save(assignment);
     }
 
-    public Assignment findById(long id) {
+    public Assignment findById(UUID id) {
         Optional<Assignment> assignment = assignmentRepository.findById(id);
         return assignment.orElse(null);
     }
 
-    public void remove(User user, long assignmentId) {
+    public void remove(User user, UUID assignmentId) {
 
         assignmentRepository.deleteById(assignmentId);
     }
 
-    public boolean updateAssignment(String email, long id, AssignmentDTO assignmentDTO) {
+    public boolean updateAssignment(String email, UUID id, AssignmentDTO assignmentDTO) {
         User user = userRepository.findByEmail(email);
         Assignment assignment=assignmentRepository.findById(id).get();
         if(assignment.getUser().getId()==user.getId()){
@@ -58,7 +59,7 @@ public class AssignmentService {
 
     }
 
-    public boolean deleteAssignment(String email, long id) {
+    public boolean deleteAssignment(String email, UUID id) {
         User user=userRepository.findByEmail(email);
         Assignment assignment=assignmentRepository.findById(id).get();
         if(assignment.getUser().getId() == user.getId()){
