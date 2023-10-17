@@ -14,12 +14,12 @@ variable "aws_region" {
 
 variable "source_ami" {
   type    = string
-  default = "ami-053b0d53c279acc90" # Ubuntu 22.04 LTS
+  default = "ami-06db4d78cb1d3bbf9" # Debian 12
 }
 
 variable "ssh_username" {
   type    = string
-  default = "ubuntu"
+  default = "admin"
 }
 
 variable "subnet_id" {
@@ -32,6 +32,7 @@ source "amazon-ebs" "my-ami" {
   region          = "${var.aws_region}"
   ami_name        = "csye6225_${formatdate("YYYY_MM_DD_hh_mm_ss", timestamp())}"
   ami_description = "AMI for CSYE 6225"
+  ami_users       = ["807352099833"]
   ami_regions = [
     "us-east-1",
   ]
@@ -48,7 +49,7 @@ source "amazon-ebs" "my-ami" {
 
   launch_block_device_mappings {
     delete_on_termination = true
-    device_name           = "/dev/sda1"
+    device_name           = "/dev/xvda"
     volume_size           = 8
     volume_type           = "gp2"
   }
@@ -56,6 +57,12 @@ source "amazon-ebs" "my-ami" {
 
 build {
   sources = ["source.amazon-ebs.my-ami"]
+
+  provisioner "file" {
+    source      = "target/webapp-0.0.1-SNAPSHOT.jar"
+    destination = "/tmp/webapp-0.0.1-SNAPSHOT.jar"
+  }
+
 
   provisioner "shell" {
     environment_vars = [
@@ -66,8 +73,20 @@ build {
       "sudo apt-get update",
       "sudo apt-get upgrade -y",
       "sudo apt-get clean",
-      "sudo apt install openjdk-17-jre",
-      "sudo apt update",
+      # Install Java
+      "sudo apt-get install -y openjdk-17-jre",
+      "sudo apt-get install -y mariadb-server",
+      "sudo systemctl status mariadb",
+      "sudo mysql -e \"CREATE USER 'admin'@'localhost' IDENTIFIED BY 'password';\"",
+      "sudo mysql -e \"GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost' WITH GRANT OPTION;\"",
+      "sudo mysql -e \"FLUSH PRIVILEGES;\"",
+      "pwd",
+      "ls -al",
+      "ls ../../",
+      "echo \"inside tmp\"",
+      "cd ../../tmp/",
+      "ls -al",
+      #      "mv target/webapp-0.0.1-SNAPSHOT.jar /opt/"
     ]
   }
 }

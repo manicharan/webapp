@@ -1,0 +1,28 @@
+name: IntegrationTest
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    name: Validate Packer
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Packer
+        uses: hashicorp/setup-packer@main
+        id: setup
+
+
+      - name: Initialize packer
+        run: packer init debian-ami.pkr.hcl
+
+      - name: Format packer
+        run: packer fmt debian-ami.pkr.hcl
+
+      - name: Validate packer
+        run: packer validate debian-ami.pkr.hcl
