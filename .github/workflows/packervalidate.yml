@@ -19,10 +19,10 @@ jobs:
 
 
       - name: Initialize packer
-        run: packer init debian-ami.pkr.hcl
+        run: packer init ./Packer/.
 
       - name: Format packer
-        run: packer fmt debian-ami.pkr.hcl
+        run: packer fmt ./Packer/.
 
       - name: Validate packer
-        run: packer validate debian-ami.pkr.hcl
+        run: packer validate ./Packer/.
