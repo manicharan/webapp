@@ -26,7 +26,7 @@ public class UserLoadService {
     }
 
     public void InitializeUsersFromCSV(){
-        try (BufferedReader reader = new BufferedReader(new FileReader("/opt/users.csv"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("opt/users.csv"))) {
             String line;
             String header= reader.readLine();
             while ((line=reader.readLine()) != null) {
