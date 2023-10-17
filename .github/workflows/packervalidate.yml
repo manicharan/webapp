@@ -13,6 +13,34 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: 17
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Set up MariaDB
+        run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y mariadb-server mariadb-client
+
+      - name: Start and check MariaDB
+        run: |
+          sudo systemctl start mariadb
+          sudo systemctl enable mariadb
+          sudo systemctl status mariadb
+
+      - name: Create User and Grant Access
+        run: |
+          sudo mysql -e "CREATE USER '${{ secrets.MARIADBUSERNAME}}'@'localhost' IDENTIFIED BY '${{ secrets.MARIADBPASSWORD}}';"
+          sudo mysql -e "GRANT ALL PRIVILEGES ON *.* TO '${{ secrets.MARIADBUSERNAME}}'@'localhost' WITH GRANT OPTION;"
+          sudo mysql -e "FLUSH PRIVILEGES;"
+
+      - name: Build with Maven
+        run: |
+          mvn clean install
+
       - name: Set up Packer
         uses: hashicorp/setup-packer@main
         id: setup
