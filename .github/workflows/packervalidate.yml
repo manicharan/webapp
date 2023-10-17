@@ -19,10 +19,10 @@ jobs:
 
 
       - name: Initialize packer
-        run: packer init ./Packer/.
+        run: packer init ./packer/.
 
       - name: Format packer
-        run: packer fmt ./Packer/.
+        run: packer fmt ./packer/.
 
       - name: Validate packer
-        run: packer validate ./Packer/.
+        run: packer validate ./packer/.
