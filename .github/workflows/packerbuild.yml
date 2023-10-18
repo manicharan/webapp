@@ -1,14 +1,20 @@
-name: ValidationTest
+name: Build Test
 
 on:
   pull_request:
     branches: [ "main" ]
 
+#on:
+#  pull_request:
+#    types: [closed]
+#    branches:
+#      - main
+
 jobs:
   build:
-    name: Validate Packer
+    name: Build Packer
     runs-on: ubuntu-latest
-
+#    if: github.event.pull_request.merged == true
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -49,16 +55,32 @@ jobs:
       - name: Initialize packer
         run: packer init ./packer/.
 
-      - name: Format packer
-        run: packer fmt ./packer/.
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_AccessKey }}
+          aws-secret-access-key: ${{ secrets.AWS_SecretAccessKey }}
+          aws-region: us-east-1
 
-      - name: Check for Changes
-        run: |
-          git diff --exit-code
-          if [ $? -eq 1 ]; then
-            echo "ERROR: Running 'packer fmt' made changes to the debian-ami.pkr.hcl file."
-            exit 1
-          fi
+      - name: Packer Build
+        run: packer build ./packer/ami_packer.pkr.hcl
 
-      - name: Validate packer
-        run: packer validate ./packer/.
+
+      #      - name: Build Maven
+#        run: |
+#          mvn clean package
+#          pwd
+#          mkdir stage && cp target/webapp-0.0.1-SNAPSHOT.jar stage
+#          cp stage/*.jar ami
+#          cd ami && ls -all
+#      - name: Packer build
+#        uses: hashicorp/packer-github-actions@master
+#        with:
+#          command: build
+#          arguments: "-color=false -on-error=abort"
+#          target: main.pkr.hcl
+#          working_directory: ami
+#        env:
+#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          aws-profile: ${{ secrets.AWS_PROFILE}}
