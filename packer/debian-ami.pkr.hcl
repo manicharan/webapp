@@ -59,8 +59,13 @@ build {
   sources = ["source.amazon-ebs.my-ami"]
 
   provisioner "file" {
-    source      = "webapp-0.0.1-SNAPSHOT.jar"
-    destination = "webapp-0.0.1-SNAPSHOT.jar"
+    source      = "target/webapp-0.0.1-SNAPSHOT.jar"
+    destination = "/tmp/webapp-0.0.1-SNAPSHOT.jar"
+  }
+
+  provisioner "file" {
+    source      = "opt/users.csv"
+    destination = "/tmp/users.csv"
   }
 
 
@@ -84,11 +89,11 @@ build {
       "ls -al",
       "ls ../../",
       "echo \"inside tmp\"",
-      "ls -al",
       "cd ../../tmp/",
       "ls -al",
-      "echo \"inside ami\"",
-      "cd ~/ami",
+      "sudo mv /tmp/webapp-0.0.1-SNAPSHOT.jar /opt",
+      "sudo mv /tmp/users.csv /opt",
+      "cd ~/../../opt",
       "ls -al",
       #      "mv target/webapp-0.0.1-SNAPSHOT.jar /opt/"
     ]

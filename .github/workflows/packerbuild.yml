@@ -43,53 +43,31 @@ jobs:
           sudo mysql -e "GRANT ALL PRIVILEGES ON *.* TO '${{ secrets.MARIADBUSERNAME}}'@'localhost' WITH GRANT OPTION;"
           sudo mysql -e "FLUSH PRIVILEGES;"
 
-#      - name: Build with Maven
-#        run: |
-#          mvn clean install
-#          pwd
-#          ls -al
-          
-
-#      - name: Set up Packer
-#        uses: hashicorp/setup-packer@main
-#        id: setup
-#
-#
-#      - name: Initialize packer
-#        run: packer init ./packer/.
-#
-#      - name: Set up AWS CLI
-#        uses: aws-actions/configure-aws-credentials@v1
-#        with:
-#          aws-access-key-id: ${{ secrets.AWS_AccessKey }}
-#          aws-secret-access-key: ${{ secrets.AWS_SecretAccessKey }}
-#          aws-region: us-east-1
-#
-#      - name: Packer Build
-#        run: packer build ./packer/debian-ami.pkr.hcl
-
-
-      - name: Build Maven
+      - name: Build with Maven
         run: |
           mvn clean install
           pwd
-          mkdir -p packer
-          cp target/webapp-0.0.1-SNAPSHOT.jar packer
-          cd packer
-          ls -al
-      - name: Packer build
-        uses: hashicorp/packer-github-actions@master
+
+      - name: Set up Packer
+        uses: hashicorp/setup-packer@main
+        id: setup
+
+
+      - name: Initialize packer
+        run: packer init ./packer/.
+
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          command: build
-          arguments: "-color=false -on-error=abort"
-          target: debian-ami.pkr.hcl
-          working_directory: packer
-        env:
           aws-access-key-id: ${{ secrets.AWS_AccessKey }}
           aws-secret-access-key: ${{ secrets.AWS_SecretAccessKey }}
-#          aws-profile: ${{ secrets.AWS_PROFILE}}
+          aws-region: us-east-1
 
-#      - name: Build Maven
+      - name: Packer Build
+        run: packer build ./packer/debian-ami.pkr.hcl
+
+
+      #      - name: Build Maven
 #        run: |
 #          mvn clean package
 #          pwd
