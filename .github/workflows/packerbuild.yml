@@ -73,5 +73,9 @@ jobs:
         continue-on-error: false
 
       - name: Packer Build
-        run: packer build ./packer/debian-ami.pkr.hcl
+        run: |
+          export PKR_VAR_db_user=${{ secrets.MARIADBUSERNAME}}
+          export PKR_VAR_db_password=${{ secrets.MARIADBPASSWORD}}
+          export PKR_VAR_source_ami=${{ secrets.AMI}}
+          packer build ./packer/debian-ami.pkr.hcl
         continue-on-error: false

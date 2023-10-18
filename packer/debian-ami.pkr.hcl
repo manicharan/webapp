@@ -27,6 +27,16 @@ variable "subnet_id" {
   default = "subnet-0197bbb7b45affbe2"
 }
 
+variable "db_user" {
+  type    = string
+  default = "admin"
+}
+
+variable "db_password" {
+  type    = string
+  default = "password"
+}
+
 # https://www.packer.io/plugins/builders/amazon/ebs
 source "amazon-ebs" "my-ami" {
   region          = "${var.aws_region}"
@@ -72,7 +82,9 @@ build {
   provisioner "shell" {
     environment_vars = [
       "DEBIAN_FRONTEND=noninteractive",
-      "CHECKPOINT_DISABLE=1"
+      "CHECKPOINT_DISABLE=1",
+      "DB_USER=${var.db_user}",
+      "DB_PASSWORD=${var.db_password}"
     ]
     inline = [
       "sudo apt-get update",
@@ -81,8 +93,8 @@ build {
       "sudo apt-get install -y openjdk-17-jre",
       "sudo apt-get install -y mariadb-server",
       "sudo systemctl status mariadb",
-      "sudo mysql -e \"CREATE USER 'admin'@'localhost' IDENTIFIED BY 'password';\"",
-      "sudo mysql -e \"GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost' WITH GRANT OPTION;\"",
+      "sudo mysql -e \"CREATE USER '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';\"",
+      "sudo mysql -e \"GRANT ALL PRIVILEGES ON *.* TO '${DB_USER}'@'localhost' WITH GRANT OPTION;\"",
       "sudo mysql -e \"FLUSH PRIVILEGES;\"",
       "pwd",
       "ls -al",
