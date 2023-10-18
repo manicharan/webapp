@@ -82,9 +82,7 @@ build {
   provisioner "shell" {
     environment_vars = [
       "DEBIAN_FRONTEND=noninteractive",
-      "CHECKPOINT_DISABLE=1",
-      "DB_USER=${var.db_user}",
-      "DB_PASSWORD=${var.db_password}"
+      "CHECKPOINT_DISABLE=1"
     ]
     inline = [
       "sudo apt-get update",
@@ -93,8 +91,8 @@ build {
       "sudo apt-get install -y openjdk-17-jre",
       "sudo apt-get install -y mariadb-server",
       "sudo systemctl status mariadb",
-      "sudo mysql -e \"CREATE USER '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';\"",
-      "sudo mysql -e \"GRANT ALL PRIVILEGES ON *.* TO '${DB_USER}'@'localhost' WITH GRANT OPTION;\"",
+      "sudo mysql -e \"CREATE USER '\"${var.db_user}\"'@'localhost' IDENTIFIED BY '\"${var.db_password}\"';\"",
+      "sudo mysql -e \"GRANT ALL PRIVILEGES ON *.* TO '\"${var.db_user}\"'@'localhost' WITH GRANT OPTION;\"",
       "sudo mysql -e \"FLUSH PRIVILEGES;\"",
       "pwd",
       "ls -al",
