@@ -1,4 +1,4 @@
-name: Build Test
+name: BuildTest
 
 on:
   pull_request:
@@ -63,7 +63,7 @@ jobs:
           aws-region: us-east-1
 
       - name: Packer Build
-        run: packer build ./packer/ami_packer.pkr.hcl
+        run: packer build ./packer/debian-ami.pkr.hcl
 
 
       #      - name: Build Maven
