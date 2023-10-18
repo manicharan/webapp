@@ -2,22 +2,19 @@ name: BuildTest
 
 on:
   pull_request:
-    branches: [ "main" ]
-
-#on:
-#  pull_request:
-#    types: [closed]
-#    branches:
-#      - main
+    types: [closed]
+    branches:
+      - main
 
 jobs:
   build:
     name: Build Packer
     runs-on: ubuntu-latest
-#    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+        continue-on-error: false
 
       - name: Set up Java
         uses: actions/setup-java@v2
@@ -25,36 +22,47 @@ jobs:
           java-version: 17
           distribution: 'temurin'
           cache: maven
+        continue-on-error: false
 
       - name: Set up MariaDB
         run: |
           sudo apt-get update
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y mariadb-server mariadb-client
+        continue-on-error: false
 
       - name: Start and check MariaDB
         run: |
           sudo systemctl start mariadb
           sudo systemctl enable mariadb
           sudo systemctl status mariadb
+        continue-on-error: false
 
       - name: Create User and Grant Access
         run: |
           sudo mysql -e "CREATE USER '${{ secrets.MARIADBUSERNAME}}'@'localhost' IDENTIFIED BY '${{ secrets.MARIADBPASSWORD}}';"
           sudo mysql -e "GRANT ALL PRIVILEGES ON *.* TO '${{ secrets.MARIADBUSERNAME}}'@'localhost' WITH GRANT OPTION;"
           sudo mysql -e "FLUSH PRIVILEGES;"
+        continue-on-error: false
 
-      - name: Build with Maven
+      - name: Build and Test
         run: |
           mvn clean install
           pwd
+          ls -al
+          chmod +x ./mvnw
+          ./mvnw clean install
+          ./mvnw test
+        continue-on-error: false
 
       - name: Set up Packer
         uses: hashicorp/setup-packer@main
         id: setup
+        continue-on-error: false
 
 
       - name: Initialize packer
         run: packer init ./packer/.
+        continue-on-error: false
 
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v1
@@ -62,26 +70,8 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_AccessKey }}
           aws-secret-access-key: ${{ secrets.AWS_SecretAccessKey }}
           aws-region: us-east-1
+        continue-on-error: false
 
       - name: Packer Build
         run: packer build ./packer/debian-ami.pkr.hcl
-
-
-      #      - name: Build Maven
-#        run: |
-#          mvn clean package
-#          pwd
-#          mkdir stage && cp target/webapp-0.0.1-SNAPSHOT.jar stage
-#          cp stage/*.jar ami
-#          cd ami && ls -all
-#      - name: Packer build
-#        uses: hashicorp/packer-github-actions@master
-#        with:
-#          command: build
-#          arguments: "-color=false -on-error=abort"
-#          target: main.pkr.hcl
-#          working_directory: ami
-#        env:
-#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          aws-profile: ${{ secrets.AWS_PROFILE}}
+        continue-on-error: false

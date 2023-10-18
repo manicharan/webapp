@@ -78,7 +78,6 @@ build {
       "sudo apt-get update",
       "sudo apt-get upgrade -y",
       "sudo apt-get clean",
-      # Install Java
       "sudo apt-get install -y openjdk-17-jre",
       "sudo apt-get install -y mariadb-server",
       "sudo systemctl status mariadb",
@@ -93,9 +92,9 @@ build {
       "ls -al",
       "sudo mv /tmp/webapp-0.0.1-SNAPSHOT.jar /opt",
       "sudo mv /tmp/users.csv /opt",
+      "echo \"inside opt\"",
       "cd ~/../../opt",
       "ls -al",
-      #      "mv target/webapp-0.0.1-SNAPSHOT.jar /opt/"
     ]
   }
 }
