@@ -59,8 +59,8 @@ build {
   sources = ["source.amazon-ebs.my-ami"]
 
   provisioner "file" {
-    source      = "target/webapp-0.0.1-SNAPSHOT.jar"
-    destination = "/tmp/webapp-0.0.1-SNAPSHOT.jar"
+    source      = "webapp-0.0.1-SNAPSHOT.jar"
+    destination = "webapp-0.0.1-SNAPSHOT.jar"
   }
 
 
@@ -84,7 +84,11 @@ build {
       "ls -al",
       "ls ../../",
       "echo \"inside tmp\"",
+      "ls -al",
       "cd ../../tmp/",
+      "ls -al",
+      "echo \"inside ami\"",
+      "cd ~/ami",
       "ls -al",
       #      "mv target/webapp-0.0.1-SNAPSHOT.jar /opt/"
     ]

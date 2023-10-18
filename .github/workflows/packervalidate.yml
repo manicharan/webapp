@@ -40,6 +40,11 @@ jobs:
       - name: Build with Maven
         run: |
           mvn clean install
+          pwd
+          mkdir -p ami
+          cp target/webapp-0.0.1-SNAPSHOT.jar ami
+          cd ami
+          ls -al
 
       - name: Set up Packer
         uses: hashicorp/setup-packer@main
