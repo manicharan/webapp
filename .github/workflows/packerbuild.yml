@@ -73,9 +73,9 @@ jobs:
         run: |
           mvn clean install
           pwd
-          mkdir -p ami
-          cp target/webapp-0.0.1-SNAPSHOT.jar ami
-          cd ami
+          mkdir -p packer
+          cp target/webapp-0.0.1-SNAPSHOT.jar packer
+          cd packer
           ls -al
       - name: Packer build
         uses: hashicorp/packer-github-actions@master
@@ -83,7 +83,7 @@ jobs:
           command: build
           arguments: "-color=false -on-error=abort"
           target: debian-ami.pkr.hcl
-          working_directory: ami
+          working_directory: packer
         env:
           aws-access-key-id: ${{ secrets.AWS_AccessKey }}
           aws-secret-access-key: ${{ secrets.AWS_SecretAccessKey }}
