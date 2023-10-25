@@ -27,16 +27,6 @@ variable "subnet_id" {
   default = "subnet-0197bbb7b45affbe2"
 }
 
-variable "db_user" {
-  type    = string
-  default = "admin"
-}
-
-variable "db_password" {
-  type    = string
-  default = "password"
-}
-
 # https://www.packer.io/plugins/builders/amazon/ebs
 source "amazon-ebs" "my-ami" {
   region          = "${var.aws_region}"
@@ -90,15 +80,22 @@ build {
       "CHECKPOINT_DISABLE=1"
     ]
     inline = [
+      "sudo groupadd csye6225",
+      "sudo useradd -s /bin/false -g csye6225 -d /opt/csye6225 -m csye6225",
       "sudo apt-get update",
       "sudo apt-get upgrade -y",
       "sudo apt-get clean",
       "sudo apt-get install -y openjdk-17-jre",
       "pwd",
       "ls -al",
-      "sudo mv /tmp/webapp-0.0.1-SNAPSHOT.jar /opt",
-      "sudo mv /tmp/users.csv /opt",
-      "sudo mv /tmp/webservice.service /opt/webservice.service",
+      "sudo mv /tmp/webapp-0.0.1-SNAPSHOT.jar /opt/csye6225",
+      "sudo mv /tmp/users.csv /opt/csye6225",
+      "sudo cp /tmp/webservice.service /etc/systemd/system",
+      "systemctl daemon-reload",
+      "sudo systemctl enable webservice",
+      "sudo systemctl start webservice",
+      "sudo systemctl restart webservice",
+      "sudo systemctl stop webservice",
       "echo \"inside opt\"",
       "cd ~/../../opt",
       "ls -al",
