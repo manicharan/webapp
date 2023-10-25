@@ -91,7 +91,7 @@ build {
       "sudo mv /tmp/webapp-0.0.1-SNAPSHOT.jar /opt/csye6225",
       "sudo mv /tmp/users.csv /opt",
       "sudo cp /tmp/webservice.service /etc/systemd/system",
-      "touch /opt/csye6225/application.properties",
+      "sudo touch /opt/csye6225/application.properties",
       "sudo chown csye6225:csye6225 /opt/csye6225/application.properties",
       "sudo chmod 750 /opt/csye6225/webapp-0.0.1-SNAPSHOT.jar",
       "sudo chmod 750 /opt/csye6225/application.properties",
