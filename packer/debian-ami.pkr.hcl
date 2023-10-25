@@ -78,6 +78,11 @@ build {
     destination = "/tmp/users.csv"
   }
 
+  provisioner "file" {
+    source      = "packer/webservice.service"
+    destination = "/tmp/webservice.service"
+  }
+
 
   provisioner "shell" {
     environment_vars = [
@@ -89,19 +94,20 @@ build {
       "sudo apt-get upgrade -y",
       "sudo apt-get clean",
       "sudo apt-get install -y openjdk-17-jre",
-      "sudo apt-get install -y mariadb-server",
-      "sudo systemctl status mariadb",
-      "sudo mysql -e \"CREATE USER '\"${var.db_user}\"'@'localhost' IDENTIFIED BY '\"${var.db_password}\"';\"",
-      "sudo mysql -e \"GRANT ALL PRIVILEGES ON *.* TO '\"${var.db_user}\"'@'localhost' WITH GRANT OPTION;\"",
-      "sudo mysql -e \"FLUSH PRIVILEGES;\"",
+#      "sudo apt-get install -y mariadb-server",
+#      "sudo systemctl status mariadb",
+#      "sudo mysql -e \"CREATE USER '\"${var.db_user}\"'@'localhost' IDENTIFIED BY '\"${var.db_password}\"';\"",
+#      "sudo mysql -e \"GRANT ALL PRIVILEGES ON *.* TO '\"${var.db_user}\"'@'localhost' WITH GRANT OPTION;\"",
+#      "sudo mysql -e \"FLUSH PRIVILEGES;\"",
       "pwd",
       "ls -al",
-      "ls ../../",
-      "echo \"inside tmp\"",
-      "cd ../../tmp/",
-      "ls -al",
+#      "ls ../../",
+#      "echo \"inside tmp\"",
+#      "cd ../../tmp/",
+#      "ls -al",
       "sudo mv /tmp/webapp-0.0.1-SNAPSHOT.jar /opt",
       "sudo mv /tmp/users.csv /opt",
+      "sudo mv /packer/webservice.service /opt/webservice.service",
       "echo \"inside opt\"",
       "cd ~/../../opt",
       "ls -al",
