@@ -65,7 +65,6 @@ jobs:
         id: setup
         continue-on-error: false
 
-
       - name: Initialize packer
         run: packer init ./packer/.
         continue-on-error: false

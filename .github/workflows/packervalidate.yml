@@ -52,7 +52,6 @@ jobs:
         uses: hashicorp/setup-packer@main
         id: setup
 
-
       - name: Initialize packer
         run: packer init ./packer/.
 
