@@ -107,7 +107,7 @@ build {
       #      "ls -al",
       "sudo mv /tmp/webapp-0.0.1-SNAPSHOT.jar /opt",
       "sudo mv /tmp/users.csv /opt",
-      "sudo mv /packer/webservice.service /opt/webservice.service",
+      "sudo mv /tmp/webservice.service /opt/webservice.service",
       "echo \"inside opt\"",
       "cd ~/../../opt",
       "ls -al",

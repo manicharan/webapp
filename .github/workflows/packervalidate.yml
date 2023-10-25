@@ -33,11 +33,17 @@ jobs:
 
       - name: Create User and Grant Access
         run: |
-          sudo mysql -e "CREATE USER '${{ secrets.MARIADBUSERNAME}}'@'localhost' IDENTIFIED BY '${{ secrets.MARIADBPASSWORD}}';"
-          sudo mysql -e "GRANT ALL PRIVILEGES ON *.* TO '${{ secrets.MARIADBUSERNAME}}'@'localhost' WITH GRANT OPTION;"
+          sudo mysql -e "CREATE USER '${{ secrets.MARIADBUSERNAME}}'@'${{ secrets.MARIADBHOST}}' IDENTIFIED BY '${{ secrets.MARIADBPASSWORD}}';"
+          sudo mysql -e "GRANT ALL PRIVILEGES ON *.* TO '${{ secrets.MARIADBUSERNAME}}'@'${{ secrets.MARIADBHOST}}' WITH GRANT OPTION;"
           sudo mysql -e "FLUSH PRIVILEGES;"
 
       - name: Build with Maven
+        env:
+          DB_Host: ${{ secrets.MARIADBHOST}}
+          DB_Port: ${{ secrets.MARIADBPORT}}
+          DB_Database: ${{ secrets.MARIADBDATABASE}}
+          DB_User: ${{ secrets.MARIADBUSERNAME}}
+          DB_Password: ${{ secrets.MARIADBPASSWORD}}
         run: |
           mvn clean install
           pwd
