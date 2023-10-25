@@ -93,6 +93,7 @@ build {
       "sudo cp /tmp/webservice.service /etc/systemd/system",
       "sudo touch /opt/csye6225/application.properties",
       "sudo chown csye6225:csye6225 /opt/csye6225/application.properties",
+      "sudo chown csye6225:csye6225 /opt/csye6225/webapp-0.0.1-SNAPSHOT.jar",
       "sudo chmod 750 /opt/csye6225/webapp-0.0.1-SNAPSHOT.jar",
       "sudo chmod 750 /opt/csye6225/application.properties",
       "sudo systemctl daemon-reload",
