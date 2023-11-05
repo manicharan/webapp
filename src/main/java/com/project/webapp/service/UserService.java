@@ -1,11 +1,8 @@
 package com.project.webapp.service;
 
-import com.project.webapp.entity.Assignment;
-import com.project.webapp.entity.AssignmentDTO;
 import com.project.webapp.entity.User;
 import com.project.webapp.repository.AssignmentRepository;
 import com.project.webapp.repository.UserRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,13 +11,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 @Service
-public class UserLoadService {
+public class UserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private AssignmentRepository assignmentRepository;
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }

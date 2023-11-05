@@ -1,23 +1,24 @@
 package com.project.webapp.entity;
 
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class AssignmentDTO {
-    @NotNull(message = "name cannot be null")
+    @NotNull
+    @Pattern(regexp = ".*[a-zA-Z].*")
     private String name;
-    @NotNull(message = "points cannot be null")
+    @NotNull
     @Max(100)
     @Min(0)
     @Digits(integer = 3,fraction = 0)
     private double points;
+    @Max(100)
+    @Min(0)
+    @Digits(integer = 3,fraction = 0)
     @NotNull
-    private int num_of_attempts;
+    private double num_of_attempts;
     @NotNull
     private LocalDateTime deadline;
 
@@ -49,11 +50,11 @@ public class AssignmentDTO {
         this.points = points;
     }
 
-    public int getNum_of_attempts() {
+    public double getNum_of_attempts() {
         return num_of_attempts;
     }
 
-    public void setNum_of_attempts(int num_of_attempts) {
+    public void setNum_of_attempts(double num_of_attempts) {
         this.num_of_attempts = num_of_attempts;
     }
 

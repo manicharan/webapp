@@ -5,8 +5,7 @@ import com.project.webapp.entity.AssignmentDTO;
 import com.project.webapp.entity.User;
 import com.project.webapp.service.AssignmentService;
 import com.project.webapp.service.AuthenticationService;
-import com.project.webapp.service.UserLoadService;
-import com.project.webapp.utility.Validation;
+import com.project.webapp.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,7 @@ public class AssignmentController {
     @Autowired
     private AssignmentService assignmentService;
     @Autowired
-    private UserLoadService userLoadService;
+    private UserService userService;
     @Autowired
     private AuthenticationService authenticationService;
 
@@ -42,75 +41,61 @@ public class AssignmentController {
     }
 
     @PostMapping
-    public ResponseEntity<Assignment> createAssignment(@Valid @RequestBody(required = false) AssignmentDTO assignmentDTO, HttpServletRequest request, BindingResult bindingResult) {
+    public ResponseEntity<Object> createAssignment(@Valid @RequestBody(required = false) AssignmentDTO assignmentDTO, HttpServletRequest request, BindingResult bindingResult) {
         if(bindingResult.hasErrors() || assignmentDTO==null){
-            //!(Validation.IsValidAssignment(assignmentDTO))
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-
+            return new ResponseEntity<>("Please check the request body", HttpStatus.BAD_REQUEST);
         }
         String[] credentials = authenticationService.getCredentialsFromRequest(request);
-        User user = userLoadService.findByEmail(credentials[0]);
+        User user = userService.findByEmail(credentials[0]);
         Assignment assignment = assignmentService.saveAssignment(user, assignmentDTO);
         return new ResponseEntity<>(assignment, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Assignment> getAssignmentById(@PathVariable UUID id) {
+    public ResponseEntity<Object> getAssignmentById(@PathVariable UUID id) {
         Assignment assignment = assignmentService.findById(id);
         if (assignment != null)
             return new ResponseEntity<>(assignment, HttpStatus.OK);
         else
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("The URL doesn't exist", HttpStatus.NOT_FOUND);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteAssignmentById(@PathVariable UUID id,HttpServletRequest request){
+    public ResponseEntity<String> deleteAssignmentById(@PathVariable UUID id,HttpServletRequest request,@RequestBody(required = false) AssignmentDTO assignmentDTO){
         Assignment assignment=assignmentService.findById(id);
         if(assignment!=null){
-            String[] credentials = authenticationService.getCredentialsFromRequest(request);
-            if(assignmentService.deleteAssignment(credentials[0],id)){
-                return new ResponseEntity<>(null,HttpStatus.NO_CONTENT);
-            }else
-                return new ResponseEntity<>(null,HttpStatus.FORBIDDEN);
-
+            if(assignmentDTO!=null) {
+                return new ResponseEntity<>("Request body is not allowed here", HttpStatus.BAD_REQUEST);
+            }else {
+                String[] credentials = authenticationService.getCredentialsFromRequest(request);
+                if (assignmentService.deleteAssignment(credentials[0], id)) {
+                    return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+                } else
+                    return new ResponseEntity<>("Restricted access", HttpStatus.FORBIDDEN);
+            }
         }
         else
-            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("The URL doesn't exist",HttpStatus.NOT_FOUND);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateAssignment(@PathVariable UUID id,@RequestBody(required = false) AssignmentDTO assignmentDTO, HttpServletRequest request){
+    public ResponseEntity<String> updateAssignment(@PathVariable UUID id,@Valid @RequestBody(required = false) AssignmentDTO assignmentDTO, HttpServletRequest request, BindingResult bindingResult){
         Assignment assignment=assignmentService.findById(id);
         if(assignment==null){
-            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("The URL doesn't exist",HttpStatus.NOT_FOUND);
+        } else {
+            if (bindingResult.hasErrors() || assignmentDTO == null) {
+                return new ResponseEntity<>("Please check the request body", HttpStatus.BAD_REQUEST);
+            } else {
+                String[] credentials = authenticationService.getCredentialsFromRequest(request);
+                if (assignmentService.updateAssignment(credentials[0], id, assignmentDTO)) {
+                    return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+                } else
+                    return new ResponseEntity<>("Restricted access", HttpStatus.FORBIDDEN);
+            }
         }
-        if(assignmentDTO==null || !(Validation.IsValidAssignment(assignmentDTO)))
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        String[] credentials = authenticationService.getCredentialsFromRequest(request);
-        if(assignmentService.updateAssignment(credentials[0],id,assignmentDTO)){
-            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-        }else
-            return new ResponseEntity<>(null,HttpStatus.FORBIDDEN);
 
     }
     @PatchMapping("/{id}")
     public ResponseEntity<String> patchMethod(){
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).header("NotAllowed","The Requested Method Is Not Allowed").cacheControl(CacheControl.noCache()).build();
     }
-
-
-
-//    private List<AssignmentDTO> getAssignmentDTOsFromAssignments(List<Assignment> assignmentList) {
-//        List<AssignmentDTO> assignmentDTOS = new ArrayList<>();
-//        for (Assignment a : assignmentList) {
-//            assignmentDTOS.add(getAssignmentDTOFromAssignment(a));
-//        }
-//        return assignmentDTOS;
-//    }
-//
-//    private AssignmentDTO getAssignmentDTOFromAssignment(Assignment a) {
-//        AssignmentDTO assignmentDTO = new AssignmentDTO();
-//        BeanUtils.copyProperties(a, assignmentDTO);
-//        assignmentDTO.setPoints(a.getPoints());
-//        return assignmentDTO;
-//    }
-
 }
