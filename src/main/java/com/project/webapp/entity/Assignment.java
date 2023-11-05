@@ -1,5 +1,6 @@
 package com.project.webapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ public class Assignment {
     private LocalDateTime assignment_updated;
     @ManyToOne
     @JoinColumn(name="userId")
+    @JsonIgnore
     private User user;
     public Assignment(){}
 

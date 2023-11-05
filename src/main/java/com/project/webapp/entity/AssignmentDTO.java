@@ -1,38 +1,37 @@
 package com.project.webapp.entity;
 
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class AssignmentDTO {
-    private UUID id;
+    @NotNull(message = "name cannot be null")
     private String name;
-    private int points;
+    @NotNull(message = "points cannot be null")
+    @Max(100)
+    @Min(0)
+    @Digits(integer = 3,fraction = 0)
+    private double points;
+    @NotNull
     private int num_of_attempts;
+    @NotNull
     private LocalDateTime deadline;
-    private LocalDateTime assignment_created;
-    private LocalDateTime assignment_updated;
 
     public AssignmentDTO(UUID id, String name, int points, int num_of_attempts, LocalDateTime deadline, LocalDateTime assignment_created, LocalDateTime assignment_updated) {
-        this.id = id;
         this.name = name;
         this.points = points;
         this.num_of_attempts = num_of_attempts;
         this.deadline = deadline;
-        this.assignment_created = assignment_created;
-        this.assignment_updated = assignment_updated;
     }
 
     public AssignmentDTO() {
 
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -42,11 +41,11 @@ public class AssignmentDTO {
         this.name = name;
     }
 
-    public int getPoints() {
+    public double getPoints() {
         return points;
     }
 
-    public void setPoints(int points) {
+    public void setPoints(double points) {
         this.points = points;
     }
 
@@ -64,21 +63,5 @@ public class AssignmentDTO {
 
     public void setDeadline(LocalDateTime deadline) {
         this.deadline = deadline;
-    }
-
-    public LocalDateTime getAssignment_created() {
-        return assignment_created;
-    }
-
-    public void setAssignment_created(LocalDateTime assignment_created) {
-        this.assignment_created = assignment_created;
-    }
-
-    public LocalDateTime getAssignment_updated() {
-        return assignment_updated;
-    }
-
-    public void setAssignment_updated(LocalDateTime assignment_updated) {
-        this.assignment_updated = assignment_updated;
     }
 }

@@ -27,7 +27,7 @@ public class AssignmentService {
     public Assignment saveAssignment(User user, AssignmentDTO assignmentDTO) {
         Assignment assignment = new Assignment();
         assignment.setName(assignmentDTO.getName());
-        assignment.setPoints(assignmentDTO.getPoints());
+        assignment.setPoints((int)assignmentDTO.getPoints());
         assignment.setNum_of_attempts(assignmentDTO.getNum_of_attempts());
         assignment.setDeadline(assignmentDTO.getDeadline());
         assignment.setUser(user);
@@ -49,7 +49,7 @@ public class AssignmentService {
         Assignment assignment=assignmentRepository.findById(id).get();
         if(assignment.getUser().getId()==user.getId()){
             assignment.setName(assignmentDTO.getName());
-            assignment.setPoints(assignmentDTO.getPoints());
+            assignment.setPoints((int)assignmentDTO.getPoints());
             assignment.setNum_of_attempts(assignmentDTO.getNum_of_attempts());
             assignment.setDeadline(assignmentDTO.getDeadline());
             assignmentRepository.save(assignment);
