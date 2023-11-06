@@ -99,7 +99,7 @@ build {
       "sudo touch /opt/csye6225/application.properties",
       "sudo chown csye6225:csye6225 /opt/csye6225/application.properties",
       "sudo chown csye6225:csye6225 /opt/csye6225/webapp-0.0.1-SNAPSHOT.jar",
-#      "sudo chown csye6225:csye6225 /etc/systemd/system/webservice.service",
+      #      "sudo chown csye6225:csye6225 /etc/systemd/system/webservice.service",
       "sudo chmod 750 /opt/csye6225/webapp-0.0.1-SNAPSHOT.jar",
       "sudo chmod 750 /opt/csye6225/application.properties",
       "wget https://amazoncloudwatch-agent.s3.amazonaws.com/debian/amd64/latest/amazon-cloudwatch-agent.deb",
