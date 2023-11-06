@@ -64,7 +64,7 @@ build {
   }
 
   provisioner "file" {
-    source      = "opt/users.csv"
+    source      = "packer/users.csv"
     destination = "/tmp/users.csv"
   }
 
@@ -73,6 +73,10 @@ build {
     destination = "/tmp/webservice.service"
   }
 
+  provisioner "file" {
+    source      = "packer/cloudwatch-config.json"
+    destination = "/tmp/cloudwatch-config.json"
+  }
 
   provisioner "shell" {
     environment_vars = [
@@ -90,12 +94,16 @@ build {
       "ls -al",
       "sudo mv /tmp/webapp-0.0.1-SNAPSHOT.jar /opt/csye6225",
       "sudo mv /tmp/users.csv /opt",
+      "sudo mv /tmp/cloudwatch-config.json /opt",
       "sudo cp /tmp/webservice.service /etc/systemd/system",
       "sudo touch /opt/csye6225/application.properties",
       "sudo chown csye6225:csye6225 /opt/csye6225/application.properties",
       "sudo chown csye6225:csye6225 /opt/csye6225/webapp-0.0.1-SNAPSHOT.jar",
+#      "sudo chown csye6225:csye6225 /etc/systemd/system/webservice.service",
       "sudo chmod 750 /opt/csye6225/webapp-0.0.1-SNAPSHOT.jar",
       "sudo chmod 750 /opt/csye6225/application.properties",
+      "wget https://amazoncloudwatch-agent.s3.amazonaws.com/debian/amd64/latest/amazon-cloudwatch-agent.deb",
+      "sudo dpkg -i -E ./amazon-cloudwatch-agent.deb",
       "sudo systemctl daemon-reload",
       "sudo systemctl start webservice",
       "sudo systemctl enable webservice",
@@ -104,6 +112,9 @@ build {
       "echo \"inside opt\"",
       "cd ~/../../opt",
       "ls -al",
+      "cd csye6225",
+      "pwd",
+      "ls -al"
     ]
   }
 }
