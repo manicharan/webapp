@@ -101,6 +101,7 @@ build {
       "sudo chown csye6225:csye6225 /opt/csye6225/webapp-0.0.1-SNAPSHOT.jar",
       "sudo chown csye6225:csye6225 /var",
       "sudo chown csye6225:csye6225 /var/log",
+      "sudo chown csye6225:csye6225 /opt/cloudwatch-config.json",
       #      "sudo chown csye6225:csye6225 /etc/systemd/system/webservice.service",
       "sudo chmod 750 /opt/csye6225/webapp-0.0.1-SNAPSHOT.jar",
       "sudo chmod 750 /opt/csye6225/application.properties",
