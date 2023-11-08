@@ -1,6 +1,5 @@
 package com.project.webapp.controller;
 
-import com.project.webapp.service.AssignmentService;
 import com.project.webapp.service.DatabaseService;
 import com.timgroup.statsd.NonBlockingStatsDClient;
 import com.timgroup.statsd.StatsDClient;

@@ -52,7 +52,7 @@ public class AssignmentController {
 
     @PostMapping
     public ResponseEntity<Object> createAssignment(@Valid @RequestBody(required = false) AssignmentDTO assignmentDTO, HttpServletRequest request, BindingResult bindingResult) {
-        statsd.count("createAssignmentCounter",1);
+        statsd.incrementCounter("postAssignmentCounter");
         if(bindingResult.hasErrors() || assignmentDTO==null){
             logger.warn("Invalid body while creating assignments at /v1/assignments/id");
             return new ResponseEntity<>("Please check the request body", HttpStatus.BAD_REQUEST);
@@ -65,7 +65,7 @@ public class AssignmentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getAssignmentById(@PathVariable UUID id) {
-        statsd.count("getAssignmentByIdCounter",1);
+        statsd.incrementCounter("getAssignmentByIdCounter");
         Assignment assignment = assignmentService.findById(id);
         if (assignment != null)
             return new ResponseEntity<>(assignment, HttpStatus.OK);
@@ -74,7 +74,7 @@ public class AssignmentController {
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteAssignmentById(@PathVariable UUID id,HttpServletRequest request,@RequestBody(required = false) AssignmentDTO assignmentDTO){
-        statsd.count("deleteAssignmentCounter",1);
+        statsd.incrementCounter("deleteAssignmentCounter");
         Assignment assignment=assignmentService.findById(id);
         if(assignment!=null){
             if(assignmentDTO!=null) {
@@ -93,7 +93,7 @@ public class AssignmentController {
     }
     @PutMapping("/{id}")
     public ResponseEntity<String> updateAssignment(@PathVariable UUID id,@Valid @RequestBody(required = false) AssignmentDTO assignmentDTO, HttpServletRequest request, BindingResult bindingResult){
-        statsd.count("updateAssignmentCounter",1);
+        statsd.incrementCounter("putAssignmentCounter");
         Assignment assignment=assignmentService.findById(id);
         if(assignment==null){
             return new ResponseEntity<>("The URL doesn't exist",HttpStatus.NOT_FOUND);
