@@ -1,6 +1,8 @@
 package com.project.webapp.controller;
 
 import com.project.webapp.service.DatabaseService;
+import com.timgroup.statsd.NonBlockingStatsDClient;
+import com.timgroup.statsd.StatsDClient;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
@@ -12,13 +14,15 @@ import org.springframework.web.bind.annotation.*;
 public class HealthzController {
     @Autowired
     DatabaseService databaseService;
+    private static final StatsDClient statsd = new NonBlockingStatsDClient("healthz", "localhost", 8125);
 
-    @GetMapping("/healthz")
+   @GetMapping("/healthz")
     public ResponseEntity<String> getHealth(@RequestBody(required = false) String requestBody, HttpServletRequest request){
+       statsd.incrementCounter("getHealthzCounter");
         if(requestBody!=null || !request.getParameterMap().isEmpty()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("BadRequest","Invalid Request").cacheControl(CacheControl.noCache()).build();
         }
-        if(databaseService.isServerRunning()){
+        else if(databaseService.isServerRunning()){
             return ResponseEntity.ok().header("OK","Success").cacheControl(CacheControl.noCache()).build();
         }
         else{
