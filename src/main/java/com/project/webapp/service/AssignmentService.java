@@ -38,7 +38,7 @@ public class AssignmentService {
         assignment.setDeadline(assignmentDTO.getDeadline());
         assignment.setUser(user);
         Assignment savedAssignment = assignmentRepository.save(assignment);
-        logger.info("Saved assignment with id {} for user with id {}",savedAssignment.getId(),user.getId());
+        logger.info("Saved assignment with id {} for user {}",savedAssignment.getId(),user.getEmail());
         logger.debug("exiting saveAssignment method");
         return savedAssignment;
     }
@@ -49,7 +49,7 @@ public class AssignmentService {
         if(assignment.isPresent())
             logger.info("Found assignment with id {}",id);
         else
-            logger.info("No assignment found for id {}",id);
+            logger.warn("No assignment found for id {}",id);
         logger.debug("exiting findById method");
         return assignment.orElse(null);
     }
@@ -67,7 +67,7 @@ public class AssignmentService {
             logger.info("updated assignment with id {}",savedAssignment.getId());
             return true;
         } else{
-            logger.debug("could not save assignment, Forbidden");
+            logger.warn("could not update assignment, Forbidden");
             return false;
         }
     }
@@ -81,7 +81,7 @@ public class AssignmentService {
             assignmentRepository.deleteById(id);
             return true;
         }else {
-            logger.debug("could not delete assignment, Forbidden");
+            logger.warn("could not delete assignment, Forbidden");
             return false;
         }
     }
