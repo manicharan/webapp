@@ -112,11 +112,11 @@ build {
       "sudo systemctl enable webservice",
       #      "sudo systemctl restart webservice",
       #      "sudo systemctl stop webservice",
-      "echo \"inside opt\"",
       "cd ~/../../opt",
+      "echo \"inside opt\"",
       "ls -al",
       "cd csye6225",
-      "pwd",
+      "echo \"inside csye6225\"",
       "ls -al"
     ]
   }

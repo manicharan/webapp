@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 public class HealthzController {
     @Autowired
     DatabaseService databaseService;
+    @Value("${availabilityZone}")
+    String availabilityZone;
     private static final Logger logger = LogManager.getLogger(HealthzController.class);
     private static final StatsDClient statsd = new NonBlockingStatsDClient("healthz", "localhost", 8125);
 
@@ -31,6 +34,11 @@ public class HealthzController {
             logger.error("Service Unavailable: Database is down");
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).header("Unavailable", "The Server Cannot Handle The Request").cacheControl(CacheControl.noCache()).build();
         }
+    }
+
+    @GetMapping("/")
+    public String getMetadata(){
+        return availabilityZone;
     }
 
     //any methods other than GET for the same endpoint
