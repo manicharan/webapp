@@ -46,11 +46,11 @@ jobs:
 
       - name: Build and Test
         env:
-          DB_Host: ${{ secrets.MARIADBHOST}}
-          DB_Port: ${{ secrets.MARIADBPORT}}
-          DB_Database: ${{ secrets.MARIADBDATABASE}}
-          DB_User: ${{ secrets.MARIADBUSERNAME}}
-          DB_Password: ${{ secrets.MARIADBPASSWORD}}
+          DBHost: ${{ secrets.MARIADBHOST}}
+          DBPort: ${{ secrets.MARIADBPORT}}
+          DBDatabase: ${{ secrets.MARIADBDATABASE}}
+          DBUser: ${{ secrets.MARIADBUSERNAME}}
+          DBPassword: ${{ secrets.MARIADBPASSWORD}}
         run: |
           mvn clean install
           pwd
