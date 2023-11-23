@@ -51,6 +51,7 @@ jobs:
           DBDatabase: ${{ secrets.MARIADBDATABASE}}
           DBUser: ${{ secrets.MARIADBUSERNAME}}
           DBPassword: ${{ secrets.MARIADBPASSWORD}}
+          AvailabilityZone: us-east-1a
         run: |
           mvn clean install
           pwd
