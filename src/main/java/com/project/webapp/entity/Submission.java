@@ -16,22 +16,22 @@ public class Submission {
     private LocalDateTime submission_date;
     private LocalDateTime submission_updated;
     @NotNull
-    private UUID userId;
+    private UUID user_id;
     private int attempt;
     @ManyToOne
-    @JoinColumn(name="assignmentId")
+    @JoinColumn(name="assignment_id")
     @JsonIgnore
     private Assignment assignment;
 
     public Submission() {
     }
 
-    public Submission(UUID id, String submission_url, LocalDateTime submission_date, LocalDateTime submission_updated, UUID userId, int attempt, Assignment assignment) {
+    public Submission(UUID id, String submission_url, LocalDateTime submission_date, LocalDateTime submission_updated, UUID user_id, int attempt, Assignment assignment) {
         this.id = id;
         this.submission_url = submission_url;
         this.submission_date = submission_date;
         this.submission_updated = submission_updated;
-        this.userId = userId;
+        this.user_id = user_id;
         this.attempt = attempt;
         this.assignment = assignment;
     }
@@ -82,11 +82,11 @@ public class Submission {
     }
 
     public UUID getUserId() {
-        return userId;
+        return user_id;
     }
 
-    public void setUserId(UUID userId) {
-        this.userId = userId;
+    public void setUserId(UUID user_id) {
+        this.user_id = user_id;
     }
 
     public int getAttempt() {
