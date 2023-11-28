@@ -45,7 +45,7 @@ jobs:
           DBUser: ${{ secrets.MARIADBUSERNAME}}
           DBPassword: ${{ secrets.MARIADBPASSWORD}}
           AvailabilityZone: randomZone
-          sns.topic.arn: randomARN
+          snsTopicArn: randomARN
           aws.region: randomRegion
         run: |
           mvn clean install

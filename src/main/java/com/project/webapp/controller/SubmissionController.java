@@ -25,7 +25,7 @@ import java.util.UUID;
 @RequestMapping("/v1/assignments/{id}/submission")
 @Validated
 public class SubmissionController {
-    @Value("${sns.topic.arn}")
+    @Value("${snsTopicArn}")
     String snsTopicArn;
     @Autowired
     private AssignmentService assignmentService;

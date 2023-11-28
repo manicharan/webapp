@@ -45,7 +45,7 @@ jobs:
           DBUser: ${{ secrets.MARIADBUSERNAME}}
           DBPassword: ${{ secrets.MARIADBPASSWORD}}
           AvailabilityZone: us-east-1a
-          sns.topic.arn: arn:aws:sns:us-east-1:465753238257:testSNS
+          snsTopicArn: arn:aws:sns:us-east-1:465753238257:testSNS
           aws.region: us-east-1
         run: |
           pwd
