@@ -16,7 +16,7 @@ public class Submission {
     private LocalDateTime submission_date;
     private LocalDateTime submission_updated;
     @NotNull
-    private UUID user_id;
+    private UUID userId;
     private int attempt;
     @ManyToOne
     @JoinColumn(name="assignment_id")
@@ -26,12 +26,12 @@ public class Submission {
     public Submission() {
     }
 
-    public Submission(UUID id, String submission_url, LocalDateTime submission_date, LocalDateTime submission_updated, UUID user_id, int attempt, Assignment assignment) {
+    public Submission(UUID id, String submission_url, LocalDateTime submission_date, LocalDateTime submission_updated, UUID userId, int attempt, Assignment assignment) {
         this.id = id;
         this.submission_url = submission_url;
         this.submission_date = submission_date;
         this.submission_updated = submission_updated;
-        this.user_id = user_id;
+        this.userId = userId;
         this.attempt = attempt;
         this.assignment = assignment;
     }
@@ -42,12 +42,12 @@ public class Submission {
         submission_updated=LocalDateTime.now();
         attempt=1;
     }
-    @PreUpdate
-    public void onUpdate(){
-        submission_date=LocalDateTime.now();
-        submission_updated=LocalDateTime.now();
-        attempt+=1;
-    }
+//    @PreUpdate
+//    public void onUpdate(){
+//        submission_date=LocalDateTime.now();
+//        submission_updated=LocalDateTime.now();
+//        attempt+=1;
+//    }
 
     public UUID getId() {
         return id;
@@ -82,11 +82,11 @@ public class Submission {
     }
 
     public UUID getUserId() {
-        return user_id;
+        return userId;
     }
 
-    public void setUserId(UUID user_id) {
-        this.user_id = user_id;
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 
     public int getAttempt() {

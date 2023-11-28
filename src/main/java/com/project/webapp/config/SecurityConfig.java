@@ -29,7 +29,6 @@ public class SecurityConfig{
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((requests) -> requests
                         .requestMatchers(new AntPathRequestMatcher("/healthz","GET")).permitAll()
-//                        .requestMatchers(new AntPathRequestMatcher("/","GET")).permitAll()
                         .anyRequest()
                         .authenticated());
         http.httpBasic(withDefaults())

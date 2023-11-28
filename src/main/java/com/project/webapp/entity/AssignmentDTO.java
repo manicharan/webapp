@@ -15,7 +15,7 @@ public class AssignmentDTO {
     @Digits(integer = 3,fraction = 0)
     private double points;
     @Max(100)
-    @Min(0)
+    @Min(1)
     @Digits(integer = 3,fraction = 0)
     @NotNull
     private double num_of_attempts;
