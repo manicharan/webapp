@@ -63,9 +63,9 @@ public class SubmissionController {
                 return new ResponseEntity<>("Too many attempts", HttpStatus.TOO_MANY_REQUESTS);
 
         } else {
+            logger.info("Submission not found, creating a new submission");
             Submission submission = submissionService.saveSubmission(submissionRequestDTO, assignment, user);
             SubmissionResponseDTO submissionResponseDTO = submissionService.getSubmissionResponseDTO(submission);
-            logger.info("Submission not found, creating a new submission with id {}",submission.getId());
             return new ResponseEntity<>(submissionResponseDTO, HttpStatus.CREATED);
         }
     }
