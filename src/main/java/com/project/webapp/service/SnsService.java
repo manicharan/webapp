@@ -14,7 +14,8 @@ import java.util.Map;
 
 @Service
 public class SnsService {
-
+    @Value("${snsTopicArn}")
+    String snsTopicArn;
 
     @Autowired
     private SnsClient snsClient;
@@ -23,7 +24,7 @@ public class SnsService {
     public SnsService() {
     }
 
-    public void publishMessage(String snsTopicArn, String message) {
+    public void publishMessage(String message) {
         PublishRequest request = PublishRequest.builder()
                 .topicArn(snsTopicArn)
                 .message(message)
