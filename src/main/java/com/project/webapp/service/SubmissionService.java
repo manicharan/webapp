@@ -18,7 +18,7 @@ public class SubmissionService {
     private SnsService snsService;
     private static final Logger logger = LogManager.getLogger(SubmissionService.class);
 
-    public Submission saveSubmission(SubmissionRequestDTO submissionRequestDTO, Assignment assignment, User user){
+    public Submission saveSubmission(String snsTopicArn, SubmissionRequestDTO submissionRequestDTO, Assignment assignment, User user){
         logger.debug("saveSubmission method hit");
         Submission submission = new Submission();
         submission.setSubmission_url(submissionRequestDTO.getSubmission_url());
@@ -26,7 +26,7 @@ public class SubmissionService {
         submission.setUserId(user.getId());
         Submission savedSubmission = submissionRepository.save(submission);
         String message = snsService.buildJson(user,assignment);
-        snsService.publishMessage(message);
+        snsService.publishMessage(snsTopicArn,message);
         logger.info("Saved submission with id {} for user {} and assignment {}",savedSubmission.getId(),user.getEmail(),assignment.getId());
         logger.debug("exiting saveSubmission method");
         return savedSubmission;

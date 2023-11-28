@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,8 @@ import java.util.UUID;
 @RequestMapping("/v1/assignments/{id}/submission")
 @Validated
 public class SubmissionController {
+    @Value("${sns.topic.arn}")
+    private String snsTopicArn;
     @Autowired
     private AssignmentService assignmentService;
     @Autowired
@@ -61,7 +64,7 @@ public class SubmissionController {
                 return new ResponseEntity<>("Too many attempts", HttpStatus.TOO_MANY_REQUESTS);
 
         } else {
-            Submission submission = submissionService.saveSubmission(submissionRequestDTO, assignment, user);
+            Submission submission = submissionService.saveSubmission(snsTopicArn,submissionRequestDTO, assignment, user);
             SubmissionResponseDTO submissionResponseDTO = submissionService.getSubmissionResponseDTO(submission);
             logger.info("Submission not found, creating a new submission with id {}",submission.getId());
             return new ResponseEntity<>(submissionResponseDTO, HttpStatus.CREATED);

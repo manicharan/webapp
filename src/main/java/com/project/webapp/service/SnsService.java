@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.webapp.entity.Assignment;
 import com.project.webapp.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.sns.SnsClient;
 import software.amazon.awssdk.services.sns.model.PublishRequest;
@@ -13,8 +14,7 @@ import java.util.Map;
 
 @Service
 public class SnsService {
-//    @Value("${sns.topic.arn}")
-//    private String snsTopicArn;
+
 
     @Autowired
     private SnsClient snsClient;
@@ -23,12 +23,11 @@ public class SnsService {
     public SnsService() {
     }
 
-    public void publishMessage(String message) {
+    public void publishMessage(String snsTopicArn, String message) {
         PublishRequest request = PublishRequest.builder()
-                .topicArn("arn:aws:sns:us-east-1:465753238257:testSNS")
+                .topicArn(snsTopicArn)
                 .message(message)
                 .build();
-
         snsClient.publish(request);
     }
 
