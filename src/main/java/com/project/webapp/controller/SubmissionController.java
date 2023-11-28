@@ -26,7 +26,7 @@ import java.util.UUID;
 @Validated
 public class SubmissionController {
     @Value("${sns.topic.arn}")
-    private String snsTopicArn;
+    String snsTopicArn;
     @Autowired
     private AssignmentService assignmentService;
     @Autowired
