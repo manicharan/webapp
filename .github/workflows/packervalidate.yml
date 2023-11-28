@@ -46,7 +46,7 @@ jobs:
           DBPassword: ${{ secrets.MARIADBPASSWORD}}
           AvailabilityZone: randomZone
           snsTopicArn: randomARN
-          aws.region: randomRegion
+          awsRegion: randomRegion
         run: |
           mvn clean install
           pwd
