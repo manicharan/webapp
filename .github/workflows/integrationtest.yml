@@ -44,7 +44,9 @@ jobs:
           DBDatabase: ${{ secrets.MARIADBDATABASE}}
           DBUser: ${{ secrets.MARIADBUSERNAME}}
           DBPassword: ${{ secrets.MARIADBPASSWORD}}
-          AvailabilityZone: us-east-1a
+          AvailabilityZone: randomZone
+          sns.topic.arn: randomARN
+          aws.region: randomRegion
         run: |
           pwd
           ls -al
