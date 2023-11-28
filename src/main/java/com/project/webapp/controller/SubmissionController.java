@@ -44,7 +44,8 @@ public class SubmissionController {
         User user = userService.findByEmail(credentials[0]);
         Assignment assignment = assignmentService.findById(id);
         Submission submission = submissionService.saveSubmission(submissionRequestDTO,assignment,user);
-        return new ResponseEntity<>(submission,HttpStatus.CREATED);
+        SubmissionResponseDTO submissionResponseDTO = submissionService.getSubmissionResponseDTO(submission);
+        return new ResponseEntity<>(submissionResponseDTO,HttpStatus.CREATED);
     }
 
     @RequestMapping(method = {RequestMethod.GET,RequestMethod.DELETE,RequestMethod.PUT,RequestMethod.PATCH,RequestMethod.HEAD,RequestMethod.OPTIONS})
