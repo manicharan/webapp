@@ -9,12 +9,12 @@ import software.amazon.awssdk.services.sns.SnsClient;
 
 @Component
 public class SNSConfig {
-    @Value("${aws.region}")
-    private String region;
+//    @Value("${aws.region}")
+//    private String region;
     @Bean
     public SnsClient snsClient() {
         return SnsClient.builder()
-                .region(Region.of(region))
+                .region(Region.of(Region.US_EAST_1.toString()))
                 .credentialsProvider(DefaultCredentialsProvider.create())
                 .build();
     }
