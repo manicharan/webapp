@@ -1,10 +1,7 @@
 package com.project.webapp.controller;
 
 import com.project.webapp.entity.*;
-import com.project.webapp.service.AssignmentService;
-import com.project.webapp.service.AuthenticationService;
-import com.project.webapp.service.SubmissionService;
-import com.project.webapp.service.UserService;
+import com.project.webapp.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.apache.logging.log4j.LogManager;
@@ -19,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -34,6 +32,8 @@ public class SubmissionController {
     private AuthenticationService authenticationService;
     @Autowired
     private SubmissionService submissionService;
+    @Autowired
+    private SnsService snsService;
 
     private static final Logger logger = LogManager.getLogger(SubmissionController.class);
 
@@ -46,27 +46,29 @@ public class SubmissionController {
         String[] credentials = authenticationService.getCredentialsFromRequest(request);
         User user = userService.findByEmail(credentials[0]);
         Assignment assignment = assignmentService.findById(id);
-        if (assignment == null)
+        if (assignment == null) {
+            logger.warn("No assignment found");
             return new ResponseEntity<>("No assignment found", HttpStatus.NOT_FOUND);
-        else if (LocalDateTime.now().isAfter(assignment.getDeadline())){
-            logger.warn("Deadline passed, rejecting the request");
-            return new ResponseEntity<>("Deadline has passed", HttpStatus.FORBIDDEN);
         }
-        else if (submissionService.findByUserAndAssignment(user, assignment)!=null) {
-            Submission submittedSubmission = submissionService.findByUserAndAssignment(user,assignment);
-            logger.info("Found submission with id {}, updating the submission",submittedSubmission.getId());
-            if(submissionService.updateSubmission(submittedSubmission.getId(),submissionRequestDTO)) {
-                SubmissionResponseDTO submissionResponseDTO = submissionService.getSubmissionResponseDTO(submissionService.findById(submittedSubmission.getId()));
+        else if (LocalDateTime.now().isAfter(assignment.getDeadline())){
+            logger.warn("Deadline passed, rejecting the submission");
+            snsService.publishMessage(snsService.buildJson("DeadlinePassed",user,assignment,0));
+            return new ResponseEntity<>("Cannot submit, deadline has passed", HttpStatus.FORBIDDEN);
+        }
+        else {
+            List<Submission> submissions = submissionService.findAllByUserAndAssignment(user,assignment);
+            logger.info("Found {} submissions for user {}",submissions.size(),user.getEmail());
+            if(submissions.size()<assignment.getNum_of_attempts()) {
+                Submission savedSubmission = submissionService.saveSubmission(submissionRequestDTO,assignment,user);
+                SubmissionResponseDTO submissionResponseDTO = submissionService.getSubmissionResponseDTO(savedSubmission);
                 return new ResponseEntity<>(submissionResponseDTO, HttpStatus.CREATED);
             }
-            else
-                return new ResponseEntity<>("Too many attempts", HttpStatus.TOO_MANY_REQUESTS);
+            else {
+                logger.warn("Too many attempts, cannot submit");
+                snsService.publishMessage(snsService.buildJson("AttemptsExhausted",user,assignment,0));
+                return new ResponseEntity<>("Too many attempts, cannot submit", HttpStatus.TOO_MANY_REQUESTS);
+            }
 
-        } else {
-            logger.info("Submission not found, creating a new submission");
-            Submission submission = submissionService.saveSubmission(submissionRequestDTO, assignment, user);
-            SubmissionResponseDTO submissionResponseDTO = submissionService.getSubmissionResponseDTO(submission);
-            return new ResponseEntity<>(submissionResponseDTO, HttpStatus.CREATED);
         }
     }
 

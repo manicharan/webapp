@@ -32,13 +32,14 @@ public class SnsService {
         snsClient.publish(request);
     }
 
-    public String buildJson(User user, Assignment assignment) {
+    public String buildJson(String valid, User user, Assignment assignment, int attempt) {
 
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> jsonMap = new HashMap<>();
-        jsonMap.put("userid", user.getEmail());
+        jsonMap.put("valid",valid);
         jsonMap.put("email", user.getEmail());
         jsonMap.put("assignmentid", assignment.getId());
+        jsonMap.put("attempt",attempt);
         try {
             jsonString = objectMapper.writeValueAsString(jsonMap);
         }catch (Exception e){

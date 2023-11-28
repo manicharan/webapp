@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -25,8 +26,8 @@ public class SubmissionService {
         submission.setAssignment(assignment);
         submission.setUserId(user.getId());
         Submission savedSubmission = submissionRepository.save(submission);
-        String message = snsService.buildJson(user,assignment);
-        snsService.publishMessage(message);
+        int attempts = submissionRepository.findAllByAssignmentAndUserId(assignment,user.getId()).size();
+        snsService.publishMessage(snsService.buildJson("Valid",user,assignment,attempts));
         logger.info("Saved submission with id {} for user {} and assignment {}",savedSubmission.getId(),user.getEmail(),assignment.getId());
         logger.debug("exiting saveSubmission method");
         return savedSubmission;
@@ -36,24 +37,8 @@ public class SubmissionService {
         return new SubmissionResponseDTO(submission.getId(),submission.getAssignment().getId(),submission.getSubmission_url(),submission.getSubmission_date(),submission.getSubmission_updated());
     }
 
-    public Submission findByUserAndAssignment(User user, Assignment assignment) {
-        return submissionRepository.findByAssignmentAndUserId(assignment,user.getId());
-    }
-
-    public boolean updateSubmission(UUID id, SubmissionRequestDTO submissionRequestDTO) {
-        Submission submission = submissionRepository.findById(id).get();
-        if(submission.getAttempt()<submission.getAssignment().getNum_of_attempts()){
-            submission.setSubmission_url(submissionRequestDTO.getSubmission_url());
-            submission.setSubmission_date(LocalDateTime.now());
-            submission.setSubmission_updated(LocalDateTime.now());
-            submission.setAttempt(submission.getAttempt()+1);
-            Submission updatedSubmission = submissionRepository.save(submission);
-            logger.info("updated Submission with id {}",updatedSubmission.getId());
-            return true;
-        }else {
-            logger.warn("Exceeded number of attempts for user");
-            return false;
-        }
+    public List<Submission> findAllByUserAndAssignment(User user, Assignment assignment) {
+        return submissionRepository.findAllByAssignmentAndUserId(assignment,user.getId());
     }
 
     public Submission findById(UUID id) {

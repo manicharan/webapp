@@ -17,7 +17,6 @@ public class Submission {
     private LocalDateTime submission_updated;
     @NotNull
     private UUID userId;
-    private int attempt;
     @ManyToOne
     @JoinColumn(name="assignment_id")
     @JsonIgnore
@@ -26,13 +25,12 @@ public class Submission {
     public Submission() {
     }
 
-    public Submission(UUID id, String submission_url, LocalDateTime submission_date, LocalDateTime submission_updated, UUID userId, int attempt, Assignment assignment) {
+    public Submission(UUID id, String submission_url, LocalDateTime submission_date, LocalDateTime submission_updated, UUID userId, Assignment assignment) {
         this.id = id;
         this.submission_url = submission_url;
         this.submission_date = submission_date;
         this.submission_updated = submission_updated;
         this.userId = userId;
-        this.attempt = attempt;
         this.assignment = assignment;
     }
 
@@ -40,7 +38,6 @@ public class Submission {
     public void onCreate(){
         submission_date=LocalDateTime.now();
         submission_updated=LocalDateTime.now();
-        attempt=1;
     }
 //    @PreUpdate
 //    public void onUpdate(){
@@ -87,14 +84,6 @@ public class Submission {
 
     public void setUserId(UUID userId) {
         this.userId = userId;
-    }
-
-    public int getAttempt() {
-        return attempt;
-    }
-
-    public void setAttempt(int attempt) {
-        this.attempt = attempt;
     }
 
     public Assignment getAssignment() {
