@@ -51,7 +51,7 @@ public class SubmissionService {
             logger.info("updated Submission with id {}",updatedSubmission.getId());
             return true;
         }else {
-            logger.info("Exceeded number of attempts for user");
+            logger.warn("Exceeded number of attempts for user");
             return false;
         }
     }

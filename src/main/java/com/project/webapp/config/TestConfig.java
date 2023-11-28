@@ -1,5 +1,6 @@
 package com.project.webapp.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,6 +13,8 @@ import software.amazon.awssdk.services.sns.SnsClient;
 
 @Component
 public class TestConfig {
+    @Value("${aws.region}")
+    private String region;
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder(10);
@@ -20,8 +23,8 @@ public class TestConfig {
     @Bean
     public SnsClient snsClient() {
         return SnsClient.builder()
-                .region(Region.of("us-east-1"))
-                .credentialsProvider(ProfileCredentialsProvider.create("dev"))
+                .region(Region.of(region))
+                .credentialsProvider(DefaultCredentialsProvider.create())
                 .build();
     }
 }

@@ -47,7 +47,7 @@ public class SubmissionController {
         if (assignment == null)
             return new ResponseEntity<>("No assignment found", HttpStatus.NOT_FOUND);
         else if (LocalDateTime.now().isAfter(assignment.getDeadline())){
-            logger.info("Deadline passed, rejecting the request");
+            logger.warn("Deadline passed, rejecting the request");
             return new ResponseEntity<>("Deadline has passed", HttpStatus.FORBIDDEN);
         }
         else if (submissionService.findByUserAndAssignment(user, assignment)!=null) {
