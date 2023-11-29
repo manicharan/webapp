@@ -2,6 +2,8 @@ package com.project.webapp.controller;
 
 import com.project.webapp.entity.*;
 import com.project.webapp.service.*;
+import com.timgroup.statsd.NonBlockingStatsDClient;
+import com.timgroup.statsd.StatsDClient;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.apache.logging.log4j.LogManager;
@@ -32,11 +34,13 @@ public class SubmissionController {
     private AuthenticationService authenticationService;
     @Autowired
     private SubmissionService submissionService;
+    private static final StatsDClient statsd = new NonBlockingStatsDClient("submissions", "localhost", 8125);
 
     private static final Logger logger = LogManager.getLogger(SubmissionController.class);
 
     @PostMapping
     public ResponseEntity<Object> submitAssignment(@PathVariable UUID id, @Valid @RequestBody(required = false) SubmissionRequestDTO submissionRequestDTO, HttpServletRequest request, BindingResult bindingResult) {
+        statsd.incrementCounter("postSubmissionCounter");
         if (bindingResult.hasErrors() || submissionRequestDTO == null) {
             logger.warn("Invalid body while submitting assignment at /v1/assignments/id/submission");
             return new ResponseEntity<>("Please check the request body", HttpStatus.BAD_REQUEST);
