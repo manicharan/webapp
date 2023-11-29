@@ -11,6 +11,7 @@ import software.amazon.awssdk.services.sns.model.PublishRequest;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class SnsService {
@@ -32,7 +33,7 @@ public class SnsService {
         snsClient.publish(request);
     }
 
-    public String buildJson(User user, Assignment assignment, int attempt,String submission_url) {
+    public String buildJson(User user, Assignment assignment, int attempt, String submission_url, UUID submission_id) {
 
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> jsonMap = new HashMap<>();
@@ -40,6 +41,7 @@ public class SnsService {
         jsonMap.put("assignment_id", assignment.getId());
         jsonMap.put("attempt",attempt);
         jsonMap.put("submission_url",submission_url);
+        jsonMap.put("submission_id",submission_id);
         try {
             jsonString = objectMapper.writeValueAsString(jsonMap);
         }catch (Exception e){

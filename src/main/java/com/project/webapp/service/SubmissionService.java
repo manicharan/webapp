@@ -27,7 +27,7 @@ public class SubmissionService {
         submission.setUserId(user.getId());
         Submission savedSubmission = submissionRepository.save(submission);
         int attempts = submissionRepository.findAllByAssignmentAndUserId(assignment,user.getId()).size();
-        snsService.publishMessage(snsService.buildJson(user,assignment,attempts,savedSubmission.getSubmission_url()));
+        snsService.publishMessage(snsService.buildJson(user,assignment,attempts,savedSubmission.getSubmission_url(),savedSubmission.getId()));
         logger.info("Saved submission with id {} for user {} and assignment {}",savedSubmission.getId(),user.getEmail(),assignment.getId());
         logger.debug("exiting saveSubmission method");
         return savedSubmission;
