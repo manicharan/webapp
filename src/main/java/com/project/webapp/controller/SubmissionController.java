@@ -66,7 +66,7 @@ public class SubmissionController {
             }
             else {
                 logger.warn("Too many attempts, cannot submit");
-                return new ResponseEntity<>("Too many attempts, cannot submit", HttpStatus.TOO_MANY_REQUESTS);
+                return new ResponseEntity<>("Too many attempts, cannot submit", HttpStatus.FORBIDDEN);
             }
 
         }
