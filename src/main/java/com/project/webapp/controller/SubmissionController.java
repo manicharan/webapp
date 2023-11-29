@@ -32,8 +32,6 @@ public class SubmissionController {
     private AuthenticationService authenticationService;
     @Autowired
     private SubmissionService submissionService;
-    @Autowired
-    private SnsService snsService;
 
     private static final Logger logger = LogManager.getLogger(SubmissionController.class);
 
@@ -52,7 +50,6 @@ public class SubmissionController {
         }
         else if (LocalDateTime.now().isAfter(assignment.getDeadline())){
             logger.warn("Deadline passed, rejecting the submission");
-            snsService.publishMessage(snsService.buildJson("DeadlinePassed",user,assignment,0,"null"));
             return new ResponseEntity<>("Cannot submit, deadline has passed", HttpStatus.FORBIDDEN);
         }
         else {
@@ -65,7 +62,6 @@ public class SubmissionController {
             }
             else {
                 logger.warn("Too many attempts, cannot submit");
-                snsService.publishMessage(snsService.buildJson("AttemptsExhausted",user,assignment,0,"null"));
                 return new ResponseEntity<>("Too many attempts, cannot submit", HttpStatus.TOO_MANY_REQUESTS);
             }
 
