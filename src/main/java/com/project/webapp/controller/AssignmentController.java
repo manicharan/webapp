@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/v2/assignments")
+@RequestMapping("/v1/assignments")
 @Validated
 public class AssignmentController {
     @Autowired
