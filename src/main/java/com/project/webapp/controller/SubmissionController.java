@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/v1/assignments/{id}/submission")
+@RequestMapping("/v2/assignments/{id}/submission")
 @Validated
 public class SubmissionController {
 
