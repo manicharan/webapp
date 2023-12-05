@@ -80,11 +80,11 @@ jobs:
           aws-region: us-east-1
         continue-on-error: false
 
-      - name: Packer Build
-        run: |
-          export PKR_VAR_source_ami=${{ secrets.AMI}}
-          packer build ./packer/debian-ami.pkr.hcl
-        continue-on-error: false
+#      - name: Packer Build
+#        run: |
+#          export PKR_VAR_source_ami=${{ secrets.AMI}}
+#          packer build ./packer/debian-ami.pkr.hcl
+#        continue-on-error: false
 
       - name: Set up Demo AWS CLI
         uses: aws-actions/configure-aws-credentials@v1
