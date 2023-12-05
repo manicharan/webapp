@@ -80,11 +80,11 @@ jobs:
           aws-region: us-east-1
         continue-on-error: false
 
-#      - name: Packer Build
-#        run: |
-#          export PKR_VAR_source_ami=${{ secrets.AMI}}
-#          packer build ./packer/debian-ami.pkr.hcl
-#        continue-on-error: false
+      - name: Packer Build
+        run: |
+          export PKR_VAR_source_ami=${{ secrets.AMI}}
+          packer build ./packer/debian-ami.pkr.hcl
+        continue-on-error: false
 
       - name: Set up Demo AWS CLI
         uses: aws-actions/configure-aws-credentials@v1
@@ -93,11 +93,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SecretAccessKey_Demo }}
           aws-region: us-east-1
         continue-on-error: false
-#
-#      - name: Create a new Launch Template with new AMI ID
-#        run: |
-#          latest_ami_id=$(aws ec2 describe-images --owners ${{ secrets.Demo_Account_Id }} --query 'Images | sort_by(@, &CreationDate) | [-1].ImageId' --output text)
-#        aws ec2 create-launch-template-version
+
       - name: Update Launch template with new AMI and initiate instance refresh
         run: |
           image_id=$(aws ec2 describe-images --owners ${{ vars.DEV_ACCOUNT_ID }} --filters "Name=name,Values=csye6225_2023_*" --query 'sort_by(Images, &CreationDate)[-1].ImageId')
